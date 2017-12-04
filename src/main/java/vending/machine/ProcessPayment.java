@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ProcessPayment {
-    protected boolean paymentAuthorised = false;
+    private boolean paymentAuthorised = false;
     public BigDecimal choicePrice;
-    protected BigDecimal cash;
-    protected BigDecimal change;
+    private BigDecimal cash;
+    private BigDecimal change;
 
-    protected boolean run(Ticket ticketChoice, Scanner keyboard, Language interfaceChoice) {
+    public boolean run(Ticket ticketChoice, Scanner keyboard, Language interfaceChoice) {
         interfaceChoice.choosePaymentMethodMessage();
         switch (keyboard.nextInt()) {
             case 1:

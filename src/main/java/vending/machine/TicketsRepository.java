@@ -1,9 +1,10 @@
 package vending.machine;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TicketsRepository {
-    final ArrayList<Ticket> ticketOptions = new ArrayList<>();
+    final List<Ticket> ticketOptions = new ArrayList<>();
 
     public TicketsRepository() {
     }
@@ -12,7 +13,7 @@ public class TicketsRepository {
         ticketOptions.add(ticket);
     }
 
-    public ArrayList<Ticket> getTicketOptions() {
+    public List<Ticket> getTicketOptions() {
         return ticketOptions;
     }
 }

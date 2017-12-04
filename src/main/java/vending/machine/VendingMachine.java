@@ -2,14 +2,15 @@ package vending.machine;
 
 import java.util.Scanner;
 
-public class VendingMachine extends Exception {
+public class VendingMachine {
     private Language interfaceChoice;
     private Ticket ticketChoice = null;
+    private ProcessPayment processPayment;
 
     public VendingMachine() {
     }
 
-    public Language languageChoice(Scanner keyboard) /*throws NullPointerException */{
+    public Language languageChoice(Scanner keyboard) {
 
         System.out.println("Wybierz język / Select language: \n 1 - polski; 2 - english \n 0 - koniec / exit");
 
@@ -27,7 +28,9 @@ public class VendingMachine extends Exception {
 
     public void run(Scanner keyboard, TicketsRepository ticketsRepository) {
         boolean exit = false;
-        while (exit == false) {
+        processPayment = null;
+
+        while (!exit) {
             interfaceChoice = languageChoice(keyboard);
             if (interfaceChoice != null) {
 
@@ -35,23 +38,33 @@ public class VendingMachine extends Exception {
 
                 interfaceChoice.displayTicketChoices(ticketsRepository);
 
-                ticketChoice = ticketsRepository.getTicketOptions().get(keyboard.nextInt() - 1);
+                int ticketNumber = keyboard.nextInt();
 
-                ProcessPayment processPayment = new ProcessPayment();
+                if (ticketNumber > 1 && ticketNumber < ticketsRepository.getTicketOptions().size() + 1) {
 
-                if (processPayment.run(ticketChoice, keyboard, interfaceChoice) == true) {
-                    interfaceChoice.printTicket(ticketChoice);
-                    interfaceChoice.backToMainMenu();
-                    if(keyboard.nextInt() == 0) {
-                        exit = true;
-                        interfaceChoice.goodByeMessage();
+                    ticketChoice = ticketsRepository.getTicketOptions().get(ticketNumber - 1);
+                    processPayment = new ProcessPayment();
+
+                    if (processPayment.run(ticketChoice, keyboard, interfaceChoice)) {
+                        interfaceChoice.printTicket(ticketChoice);
+                        interfaceChoice.backToMainMenu();
+
+                        if (keyboard.nextInt() == 0) {
+                            exit = true;
+                            interfaceChoice.goodByeMessage();
+                        }
+
+                    } else {
+                        interfaceChoice.paymentDeclinedMessage();
                     }
+
                 } else {
-                    interfaceChoice.paymentDeclinedMessage();
+                    interfaceChoice.backToMainMenu();
                 }
 
             } else {
                 exit = true;
+                interfaceChoice = new  PolishInterface();
                 interfaceChoice.goodByeMessage();
             }
         }
